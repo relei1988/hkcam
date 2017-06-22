@@ -18,7 +18,7 @@ var ipAddrs chan string = make(chan string)
 var result chan string = make(chan string)
 //线程数
 var thread chan int = make(chan int)
-var nowThread int;
+var nowThread int
 
 //关闭程序
 var clo chan bool = make(chan bool)
@@ -37,12 +37,12 @@ func writeResult(){
 		s,ok = <- result
 	}
 	//通知进程退出
-	clo <- true;
+	clo <- true
 }
 //根据线程参数启动扫描线程
 func runScan(){
 	t,ok := <- thread
-	nowThread = t;
+	nowThread = t
 	if ok{
 		for i := 0;i < nowThread;i++{
 			go scan(strconv.Itoa(i))
@@ -81,13 +81,13 @@ func scan(threadId string){
 		s,ok = <-ipAddrs
 	}
 	fmt.Println("[thread-" + threadId + "] end")
-	thread <- 0;
+	thread <- 0
 }
 
 //获取下一个IP
 func nextIp(ip string) string{
 	ips := strings.Split(ip,".")
-	var i int;
+	var i int
 	for i = len(ips) - 1;i >= 0;i--{
 		n,_ := strconv.Atoi(ips[i])
 		if n >= 255{
@@ -102,7 +102,7 @@ func nextIp(ip string) string{
 	}
 	if i == -1{
 		//全部IP段都进行了进位,说明此IP本身已超出范围
-		return "";
+		return ""
 	}
 	ip = ""
 	leng := len(ips)
@@ -145,7 +145,7 @@ func processFlag(arg []string){
 	index++
 	endIp = arg[index]
 	ei := net.ParseIP(endIp)
-	if(ei == nil){
+	if ei == nil {
 		//未指定结束IP,即只扫描一个IP
 		endIp = startIp
 	}else{
@@ -192,16 +192,16 @@ func processFlag(arg []string){
 	}
 	index++
 	t,err := strconv.Atoi(arg[index])
-	if(err != nil){
+	if err != nil {
 		//线程不合法
 		fmt.Println("'thread' Setting error")
 		return
 	}
 	//最大线程2048
 	if t < 1{
-		t = 1;
+		t = 1
 	}else if t > 5000{
-		t = 5000;
+		t = 5000
 	}
 
 	//传送启动线程数
@@ -230,7 +230,6 @@ func main(){
 	for i := 0;i < flag.NArg();i++{
 		args = append(args,flag.Arg(i))
 	}
-	startTime := time.Now()
 	//启动扫描线程
 	go runScan()
 	//启动结果写入线程
@@ -238,10 +237,6 @@ func main(){
 	//参数处理
 	processFlag(args)
 	//等待退出指令
-	<- clo;
-	dur:= time.Now().Sub(startTime).Nanoseconds()
-	co := dur/1000000
-	d := strconv.FormatInt(co,10)
-	fmt.Printf("共耗时"+d+"毫秒")
+	<- clo
 	fmt.Println("Exit")
 }

@@ -2,7 +2,6 @@
   <library name="GOPATH &lt;class&gt;">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/../.idea" />
-      <root url="file://$PROJECT_DIR$/../class" />
       <root url="file://$PROJECT_DIR$/../avgdistence" />
       <root url="file://$PROJECT_DIR$/../awesomeProject" />
       <root url="file://$PROJECT_DIR$/../github.com" />
@@ -11,7 +10,6 @@
     </CLASSES>
     <SOURCES>
       <root url="file://$PROJECT_DIR$/../.idea" />
-      <root url="file://$PROJECT_DIR$/../class" />
       <root url="file://$PROJECT_DIR$/../avgdistence" />
       <root url="file://$PROJECT_DIR$/../awesomeProject" />
       <root url="file://$PROJECT_DIR$/../github.com" />
