@@ -62,6 +62,8 @@ func runScan(){
 /**
 	扫描线程
 */
+var resp *http.Response
+var erro error
 func scan(threadId string){
 	s,ok := <-ipAddrs
 	for;ok;{
@@ -69,8 +71,8 @@ func scan(threadId string){
 		sj ="http://admin:12345@" + s + "/ISAPI/Security/userCheck"
 		//fmt.Println("[thread-" + threadId + "] scan:" + sj)
 		con:=http.Client{Timeout:2*time.Second,}
-		resp,err:= con.Get(sj)
-		if err == nil{
+		resp,erro = con.Get(sj)
+		if erro == nil{
 			//端口开放
 			defer resp.Body.Close()
 			body,_ := ioutil.ReadAll(resp.Body)
