@@ -67,7 +67,7 @@ func scan(threadId string){
 	for;ok;{
 
 		sj ="http://admin:12345@" + s + "/ISAPI/Security/userCheck"
-		fmt.Println("[thread-" + threadId + "] scan:" + sj)
+		//fmt.Println("[thread-" + threadId + "] scan:" + sj)
 		con:=http.Client{Timeout:2*time.Second,}
 		resp,err:= con.Get(sj)
 		if err == nil{
@@ -234,6 +234,7 @@ func main(){
 	}
 	//启动扫描线程
 	runtime.GOMAXPROCS(runtime.NumCPU())
+	fmt.Println("以" +  string(runtime.NumCPU())+ "个cpu运行扫描")
 	go runScan()
 	//启动结果写入线程
 	go writeResult()
