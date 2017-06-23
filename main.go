@@ -234,7 +234,7 @@ func main(){
 	}
 	//启动扫描线程
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	fmt.Println("以" +  string(runtime.NumCPU())+ "个cpu运行扫描")
+	fmt.Printf("以%v个CPU运行",runtime.NumCPU())
 	go runScan()
 	//启动结果写入线程
 	go writeResult()
