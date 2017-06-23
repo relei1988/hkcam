@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 //	"reflect"
 	"time"
+	"runtime"
 )
 //扫描地址
 var ipAddrs chan string = make(chan string)
@@ -19,7 +20,7 @@ var result chan string = make(chan string)
 //线程数
 var thread chan int = make(chan int)
 var nowThread int
-
+var sj string
 //关闭程序
 var clo chan bool = make(chan bool)
 //保存结果
@@ -64,7 +65,8 @@ func runScan(){
 func scan(threadId string){
 	s,ok := <-ipAddrs
 	for;ok;{
-		sj:="http://admin:12345@" + s + "/ISAPI/Security/userCheck"
+
+		sj ="http://admin:12345@" + s + "/ISAPI/Security/userCheck"
 		fmt.Println("[thread-" + threadId + "] scan:" + sj)
 		con:=http.Client{Timeout:2*time.Second,}
 		resp,err:= con.Get(sj)
@@ -73,7 +75,7 @@ func scan(threadId string){
 			defer resp.Body.Close()
 			body,_ := ioutil.ReadAll(resp.Body)
 			str:=string(body[:])
-			if strings.Contains(str,"OK"){
+			if strings.Contains(str,"<statusString>OK</statusString>"){
 				result <- s
 			}
 
@@ -231,6 +233,7 @@ func main(){
 		args = append(args,flag.Arg(i))
 	}
 	//启动扫描线程
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	go runScan()
 	//启动结果写入线程
 	go writeResult()
